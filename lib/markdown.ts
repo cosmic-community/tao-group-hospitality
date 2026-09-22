@@ -105,8 +105,9 @@ export function markdownToHtml(markdown?: string | null): string {
     const heading = line.match(/^\s*(#{1,6})\s+(.*)$/)
     if (heading) {
       closeAll()
-      const level = heading[1].length
-      out.push(`<h${level}>${inline(heading[2].trim())}</h${level}>`)
+      const hashes = heading[1] ?? '#'
+      const level = Math.min(Math.max(hashes.length, 1), 6)
+      out.push(`<h${level}>${inline((heading[2] ?? '').trim())}</h${level}>`)
       continue
     }
 
@@ -116,7 +117,7 @@ export function markdownToHtml(markdown?: string | null): string {
       closeParagraph()
       closeList()
       inQuote = true
-      quoteBuffer.push(quote[1])
+      quoteBuffer.push(quote[1] ?? '')
       continue
     }
 
@@ -130,7 +131,7 @@ export function markdownToHtml(markdown?: string | null): string {
         out.push('<ul>')
         listType = 'ul'
       }
-      out.push(`<li>${inline(bullet[1])}</li>`)
+      out.push(`<li>${inline(bullet[1] ?? '')}</li>`)
       continue
     }
 
@@ -144,7 +145,7 @@ export function markdownToHtml(markdown?: string | null): string {
         out.push('<ol>')
         listType = 'ol'
       }
-      out.push(`<li>${inline(numbered[1])}</li>`)
+      out.push(`<li>${inline(numbered[1] ?? '')}</li>`)
       continue
     }
 
