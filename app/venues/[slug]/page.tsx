@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getVenues, getVenueBySlug, getMetafieldValue } from '@/lib/cosmic'
+import { markdownToHtml } from '@/lib/markdown'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -76,7 +77,7 @@ export default async function VenuePage({ params }: PageProps) {
         {content ? (
           <div
             className="prose prose-invert max-w-none prose-headings:font-display prose-headings:uppercase prose-headings:tracking-[0.05em] prose-a:text-gold prose-p:text-cream/80"
-            dangerouslySetInnerHTML={{ __html: content }}
+            dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
           />
         ) : (
           <p className="text-cream/50">More details coming soon.</p>
